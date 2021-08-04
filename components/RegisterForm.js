@@ -1,31 +1,34 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import { isEmpty } from 'lodash'
 
-import { loginWithEmailAndPassword } from '../utils/actions'
+import { registerUser } from '../utils/actions'
 import { validateEmail } from '../utils/helpers'
 import Loading from './Loading'
 
-export default function LoginForm() {
+export default function RegisterForm() {
 
     const navigation = useNavigation()
 
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
+    const [confirmPassword, setConfirmPassword] = useState(null)
     const [errorEmail, setErrorEmail] = useState(null)
     const [errorPassword, setErrorPassword] = useState(null)
+    const [errorConfirmPassword, setErrorConfirmPassword] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const doLogin = async() => {
+    const doRegister = async() => {
         if(!validForm()) {
             return
         }
 
         setLoading(true)
-        const result = await loginWithEmailAndPassword(email, password)
+        const result = await registerUser(email, password)
         setLoading(false)
 
         if(!result.statusResponse) {
@@ -40,6 +43,7 @@ export default function LoginForm() {
         let isValid =  true
         setErrorEmail(false)
         setErrorPassword(false)
+        setErrorConfirmPassword(false)
 
         if(!validateEmail(email)) {
             setErrorEmail("Debes ingresar un email válido.")
@@ -48,6 +52,11 @@ export default function LoginForm() {
 
         if(isEmpty(password)) {
             setErrorPassword("Debes ingresar una contraseña.")
+            isValid = false
+        }
+
+        if(password !== confirmPassword) {
+            setErrorConfirmPassword("Las contraseñas no coinciden.")
             isValid = false
         }
 
@@ -83,17 +92,31 @@ export default function LoginForm() {
                     />
                 }
             />
+            <Input
+                label = "Confirmación"
+                placeholder = "Confirme su contraseña..."
+                password={true}
+                secureTextEntry={!showConfirmPassword}
+                labelStyle = {styles.label}
+                onChange = {(e) => setConfirmPassword(e.nativeEvent.text)}
+                errorMessage = {errorConfirmPassword}
+                defaultValue = {confirmPassword}
+                rightIcon = {
+                    <Icon
+                        type = "material-community"
+                        name = { showConfirmPassword ? "eye-off-outline" : "eye-outline" }
+                        iconStyle = {styles.icon}
+                        onPress = {() => setShowConfirmPassword(!showConfirmPassword)}
+                    />
+                }
+            />
             <Button
-                title = "Iniciar Sesión"
-                onPress = {() => doLogin()}
+                title = "Registrarse"
+                onPress = {() => doRegister()}
                 containerStyle = {styles.btnContainer}
                 buttonStyle = {styles.btn}
             />
-            <Text style = {styles.register}>
-                ¿Aún no tienes una cuenta?{" "}
-                <Text style = {styles.registerLink} onPress={() => navigation.navigate("Register")} >Regístrate</Text>
-            </Text>
-            <Loading isVisible={loading} text="Iniciando Sesión..." />
+            <Loading isVisible={loading} text="Creando Cuenta..." />
         </View>
     )
 }

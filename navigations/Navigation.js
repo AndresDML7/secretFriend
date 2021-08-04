@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Login from '../screens/Login'
+import Register from '../screens/Register'
 import Games from '../screens/game/Games'
 import CreateGame from '../screens/game/CreateGame'
 
@@ -23,6 +24,11 @@ export default function Navigation() {
                     name="Login"
                     options={{ title: "Iniciar Sesión" }}
                     component={Login}
+                />
+                <Stack.Screen
+                    name="Register"
+                    options={{ title: "Crear Cuenta" }}
+                    component={Register}
                 />
                 <Stack.Screen
                     name="Games"
