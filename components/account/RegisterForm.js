@@ -4,9 +4,9 @@ import { Input, Button, Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import { isEmpty } from 'lodash'
 
-import { registerUser } from '../utils/actions'
-import { validateEmail } from '../utils/helpers'
-import Loading from './Loading'
+import { registerUser } from '../../utils/actions'
+import { validateEmail } from '../../utils/helpers'
+import Loading from '../Loading'
 
 export default function RegisterForm() {
 

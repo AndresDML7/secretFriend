@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import RegisterForm from '../components/RegisterForm'
+import RegisterForm from '../../components/account/RegisterForm'
 
 export default function Register() {
     return (
